@@ -77,7 +77,7 @@ local colon_rename_strings_array_record = {
 local strings_array_part = {
   type = "record",
   fields = {
-    { body = { type = "string" }}
+    { body = string_array }
   },
 }
 

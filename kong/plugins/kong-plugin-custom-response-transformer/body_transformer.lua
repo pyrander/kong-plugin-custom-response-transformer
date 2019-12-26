@@ -108,7 +108,6 @@ local function csplit(str,sep)
 end
 
 local function removeFromBody(body,removeFieldName,index)
-  print("removing: " .. removeFieldName .. " at current index: " .. index)
   local removeParts = csplit(removeFieldName,"%.")
   local name = removeParts[index]
   if(#removeParts>index) then
@@ -161,8 +160,8 @@ function _M.transform_json_body(conf, buffered_data)
 
   -- extract value from body
   
-  if #conf.extract.body > 0 then
-    json_body = extractFromBody(json_body,conf.extract.body,1)
+  for _, name in iter(conf.extract.body) do
+    json_body = extractFromBody(json_body,name,1)
   end
 
   -- remove key:value to body
