@@ -125,13 +125,15 @@ end
 local function extractFromBody(body,destiny,index)
   local destinyParts = csplit(destiny,"%.")
   local name = destinyParts[index]
-  if(#destinyParts>index) then
-    if body[name] then
-      body = extractFromBody(body[name],destiny,index+1)
-    end
-  else
-    if body[name] then
-      body = body[name]
+  if type(body) == "table" then
+    if(#destinyParts>index) then
+      if body[name] then
+        body = extractFromBody(body[name],destiny,index+1)
+      end
+    else
+      if body[name] then
+        body = body[name]
+      end
     end
   end
   return body

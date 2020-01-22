@@ -49,6 +49,17 @@ local function is_body_transform_set(conf)
          #conf.append.json  > 0
 end
 
+local function updateHttpStatus()
+  local statusCodeHeader = kong.response.get_header('x-status-code')
+  if statusCodeHeader ~=nil then
+    local strCode = tostring(statusCodeHeader)
+    strCode = strCode:sub(1,3)
+    if strCode ~=nil then
+      kong.response.set_status(tonumber(strCode))
+      kong.response.clear_header("x-status-code")
+    end
+  end
+end
 
 -- export utility functions
 _M.is_json_body = is_json_body
@@ -99,6 +110,7 @@ function _M.transform_headers(conf, headers)
   -- Removing the content-length header because the body is going to change
   if is_body_transform_set(conf) and is_json_body(headers["Content-Type"]) then
     kong.response.clear_header("Content-Length")
+    updateHttpStatus()
   end
 end
 
